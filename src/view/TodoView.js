@@ -14,23 +14,58 @@ export default class TodoView extends ObserverView {
     }
     
     createNewTodo(event){
-        event.preventDefault()
-        let todoText = document.querySelector('#todo-text-input').value
-        document.querySelector('#todo-text-input').value = ''
-        this.#todoController.createNewTodo(todoText)
+        try {
+            event.preventDefault()
+            let todoText = document.querySelector('#todo-text-input').value
+            document.querySelector('#todo-text-input').value = ''
+            this.#todoController.createNewTodo(todoText)
+        } catch (error) {
+            document.querySelector('#error-msg').innerHTML = error.message
+            setTimeout(() => {
+                document.querySelector('#error-msg').style.display = "none";
+            }, 5000)
+
+        }
     }
     deleteTodo(id, event){
-        event.preventDefault()
-        this.#todoController.deleteTodo(id)
+        try {
+            event.preventDefault()
+            this.#todoController.deleteTodo(id)
+    
+        } catch (error) {
+            document.querySelector('#error-msg').innerHTML = error.message
+            setTimeout(() => {
+                document.querySelector('#error-msg').style.display = "none";
+            }, 5000)
+
+        }
     }
     updateCompletedState(id,event){
-        event.preventDefault()
-        this.#todoController.updateCompletedState(id)
+        try {
+            event.preventDefault()
+            this.#todoController.updateCompletedState(id)
+    
+        } catch (error) {
+            document.querySelector('#error-msg').innerHTML = error.message
+            setTimeout(() => {
+                document.querySelector('#error-msg').style.display = "none";
+            }, 5000)
+
+        }
     }
     updateTodoText(id,event){
-        event.preventDefault()
-        let newTodoText = document.querySelector('#todo-text-input').value
-        this.#todoController.updateTodoText(id, newTodoText)
+        try {
+            event.preventDefault()
+            let newTodoText = document.querySelector('#todo-text-input').value
+            this.#todoController.updateTodoText(id, newTodoText)
+    
+        } catch (error) {
+            document.querySelector('#error-msg').innerHTML = error.message
+            setTimeout(() => {
+                document.querySelector('#error-msg').style.display = "none";
+            }, 5000)
+
+        }
     }
     render(){
         let view =   `
