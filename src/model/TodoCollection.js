@@ -11,7 +11,7 @@ export default class TodoCollection extends Observable {
         super()
         this.#todoCollection = new Array()
     }
-    #addTodo(TodoCreatedEvent){
+    addTodo(TodoCreatedEvent){
         this.#todoCollection.push({
             id:TodoCreatedEvent.todoId, 
             todoText:TodoCreatedEvent.todo, 
@@ -21,7 +21,7 @@ export default class TodoCollection extends Observable {
         })
         this.notify(this.getTodoCollection())
     }
-    #updateTodoText(TodoTextUpdatedEvent){
+    updateTodoText(TodoTextUpdatedEvent){
         this.#todoCollection.map(todo => {
             if(todo.id === TodoTextUpdatedEvent.todoId){
                 todo.todoText = TodoTextUpdatedEvent.todo
@@ -30,7 +30,7 @@ export default class TodoCollection extends Observable {
         })
         this.notify(this.getTodoCollection())
     }
-    #updateTodoCompleteState(TodoCompletedStatedChangedEvent){
+    updateTodoCompleteState(TodoCompletedStatedChangedEvent){
         this.#todoCollection.map(todo => {
             if(todo.id === TodoCompletedStatedChangedEvent.todoId){
                 todo.isCompleted = TodoCompletedStatedChangedEvent.stateOfCompleted
@@ -39,7 +39,7 @@ export default class TodoCollection extends Observable {
         })
         this.notify(this.getTodoCollection())
     }
-    #deleteTodo(TodoDeletedEvent){
+    deleteTodo(TodoDeletedEvent){
         let todoIndex = this.#todoCollection.findIndex(todo => todo.id === TodoDeletedEvent.todoId )
         this.#todoCollection.splice(todoIndex, 1)
         this.notify(this.getTodoCollection())
@@ -58,24 +58,6 @@ export default class TodoCollection extends Observable {
             todoDomainCollection.push(todoDomain)
         })
         return todoDomainCollection
-    }
-    handleEvent(event){
-        if(event instanceof TodoCreatedEvent){
-            this.#addTodo(event)
-            return;
-        }
-        else if(event instanceof TodoTextUpdatedEvent){
-            this.#updateTodoText(event)
-            return;
-        }
-        else if(event instanceof TodoCompletedStatedChangedEvent){
-            this.#updateTodoCompleteState(event)
-            return;
-        }
-        else if(event instanceof TodoDeletedEvent){
-            this.#deleteTodo(event)
-            return;
-        }
     }
 }
 
