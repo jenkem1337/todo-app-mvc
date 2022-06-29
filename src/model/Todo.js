@@ -10,6 +10,9 @@ export default class Todo extends ObservableEvent{
     #isCompleted
     #createdAt
     #updatedAt
+    constructor(map){
+        super(map)
+    }
     #setTodo(todo){
         if(!todo) throw new Error('todo is null')
         this.#todo = todo         
