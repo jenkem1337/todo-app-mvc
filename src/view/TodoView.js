@@ -8,7 +8,6 @@ export default class TodoView extends ObserverView {
         this.#todoController = todoController
         this.#state = {
             todos: new Array(),
-            hello: ''
         }
         this.render()
     }
@@ -75,7 +74,7 @@ export default class TodoView extends ObserverView {
     render(){
         let view =   `
         <h1>Todo App</h1>
-        <h3 style="color:red;" id="error-msg" >${this.#state.hello}</h3>
+        <h3 style="color:red;" id="error-msg" ></h3>
         <h3>Todo Length ${this.#state.todos.length}</h3>
         <input id="todo-text-input" type="text" placeholder="add new todo or update">
         <button onclick="todoView.createNewTodo(event)">Add New Todo</button>
