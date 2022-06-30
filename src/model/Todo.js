@@ -8,6 +8,7 @@ export default class Todo extends ObservableEvent{
     #id
     #todo
     #isCompleted
+    #isCompletedBool
     #createdAt
     #updatedAt
     constructor(map){
@@ -20,6 +21,7 @@ export default class Todo extends ObservableEvent{
     #setIsCompleted(bool){
         if(bool===null) throw new Error('completed boolean is null')
         this.#isCompleted = bool
+        this.#isCompletedBool = bool
     }
     #setId(id){
         if(!id) throw new Error('id is null')
@@ -52,7 +54,8 @@ export default class Todo extends ObservableEvent{
     }
     updateCompletedState(id, updatedAt){
         if(!id) throw new Error('id is null')
-        this.#isCompleted = (this.#isCompleted === false) ? true : false
+        let bool = (this.#isCompleted === false) ? true : false
+        this.#setIsCompleted(bool)
         this.#setUpdatedAt(updatedAt)
         this.notify(new TodoCompletedStatedChangedEvent(id, this.#isCompleted, updatedAt))
     }
@@ -74,5 +77,8 @@ export default class Todo extends ObservableEvent{
     }
     getUpdatedAt(){
         return this.#updatedAt
+    }
+    getIsCompletedBool(){
+        return this.#isCompletedBool
     }
 }
