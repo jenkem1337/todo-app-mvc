@@ -23,5 +23,4 @@ let todoView = new TodoView(todoController)
 todoCollection.addObserver(todoView)
 
 window.todoView = todoView
-todoView.render()
 
