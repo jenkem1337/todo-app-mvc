@@ -9,12 +9,38 @@ export default class TodoView extends ObserverView {
         this.#state = {
             todos: new Array(),
         }
-        this.render()
+        this.#getInitialHTMLView()
     }
-    update(fromCollection){
-        this.#state.todos = fromCollection
-        this.#state.todos.reverse()
-        this.render()
+    update(entity){
+
+        this.#state.todos = entity.getTodoCollection()
+        this.bindElement(() => 'Todo Length ' + this.#state.todos.length, 'todo-list-length')
+        
+        this.bindElement(() => {
+            return this.#state.todos.map(todo => {
+                if(!todo.getIsCompletedBool()){
+                    return `<p>Todo Id      => ${todo.getId()}</p>
+                    <p>Todo Text    => ${todo.getTodo()}</p>
+                    <p>Is Completed => ${todo.getIsCompleted()}</p>
+                    <p>Created At   => ${todo.getCreatedAt()}</p>
+                    <p>Updated At   => ${todo.getUpdatedAt()}</p>
+                    <button onclick="todoView.updateTodoText(${todo.getId()}, event)">Update Todo</button>
+                    <button onclick="todoView.updateCompletedState(${todo.getId()}, event)">Update Complated State</button>
+                    <button onclick="todoView.deleteTodo(${todo.getId()}, event)">Delete Todo</button>`
+                }else {
+                    return `<p>Todo Id      => ${todo.getId()}</p>
+                    <p>Todo Text    => ${todo.getTodo()}</p>
+                    <p>Is Completed => ${todo.getIsCompleted()}</p>
+                    <p>Created At   => ${todo.getCreatedAt()}</p>
+                    <p>Updated At   => ${todo.getUpdatedAt()}</p>
+                    <button onclick="todoView.updateTodoText(${todo.getId()}, event)" disabled>Update Todo</button>
+                    <button onclick="todoView.updateCompletedState(${todo.getId()}, event)" >Update Complated State</button>
+                    <button onclick="todoView.deleteTodo(${todo.getId()}, event)">Delete Todo</button>`
+    
+                }
+                })
+        }, 'todo-list')
+         
     }
     
     createNewTodo(event){
@@ -71,38 +97,21 @@ export default class TodoView extends ObserverView {
 
         }
     }
-    render(){
-        let view =   `
-        <h1>Todo App</h1>
-        <h3 style="color:red;" id="error-msg" ></h3>
-        <h3>Todo Length ${this.#state.todos.length}</h3>
-        <input id="todo-text-input" type="text" placeholder="add new todo or update">
-        <button onclick="todoView.createNewTodo(event)">Add New Todo</button>
-        ${this.#state.todos.map(todo => {
-            if(!todo.getIsCompletedBool()){
-                return `<p>Todo Id      => ${todo.getId()}</p>
-                <p>Todo Text    => ${todo.getTodo()}</p>
-                <p>Is Completed => ${todo.getIsCompleted()}</p>
-                <p>Created At   => ${todo.getCreatedAt()}</p>
-                <p>Updated At   => ${todo.getUpdatedAt()}</p>
-                <button onclick="todoView.updateTodoText(${todo.getId()}, event)">Update Todo</button>
-                <button onclick="todoView.updateCompletedState(${todo.getId()}, event)">Update Complated State</button>
-                <button onclick="todoView.deleteTodo(${todo.getId()}, event)">Delete Todo</button>`
-            }else {
-                return `<p>Todo Id      => ${todo.getId()}</p>
-                <p>Todo Text    => ${todo.getTodo()}</p>
-                <p>Is Completed => ${todo.getIsCompleted()}</p>
-                <p>Created At   => ${todo.getCreatedAt()}</p>
-                <p>Updated At   => ${todo.getUpdatedAt()}</p>
-                <button onclick="todoView.updateTodoText(${todo.getId()}, event)" disabled>Update Todo</button>
-                <button onclick="todoView.updateCompletedState(${todo.getId()}, event)" >Update Complated State</button>
-                <button onclick="todoView.deleteTodo(${todo.getId()}, event)">Delete Todo</button>`
 
-            }
-            })
-        }
+    bindElement(cb, element){
+        document.querySelector(`[binding-${element}]`).innerHTML = cb()
+    }
+
+    #getInitialHTMLView(){
+        let viewTemplate =   `
+        <h1>Todo App</h1>
+        <h3 style="color:red;" id="error-msg" binding-error></h3>
+        <h3 binding-todo-list-length></h3>
+        <input id="todo-text-input" value="" type="text" placeholder="add new todo or update">
+        <button onclick="todoView.createNewTodo(event)">Add New Todo</button>
+        <div binding-todo-list></div>
         `
-        document.getElementById('root').innerHTML = view 
+        document.getElementById('root').innerHTML = viewTemplate
 
     }
 }
