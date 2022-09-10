@@ -1,21 +1,24 @@
+import TodoAggregate from "../model/TodoAggregate.js"
+import TodoItem from "../model/TodoItem.js"
+
 export default class TodoController {
-    #todoModel
-    #todoCollection
-    constructor(model, todoCollection){
-        this.#todoModel = model
-        this.#todoCollection = todoCollection
-        this.#todoModel.addObserver(this.#todoCollection)
+    #todoAggregate
+    constructor(todoAggregate){
+        if(todoAggregate instanceof TodoAggregate){
+            this.#todoAggregate = todoAggregate
+        }
     }
     createNewTodo(todoText){
-        this.#todoModel.createNewTodo(new Date().getTime(),todoText, false, new Date().toLocaleString(), new Date().toLocaleString())
+        let todoItem = new TodoItem(new Date().getTime(),todoText, false, new Date().toLocaleString(), new Date().toLocaleString())
+        this.#todoAggregate.addTodo(todoItem)
     }
     updateTodoText(todoId, newTodoText){
-        this.#todoModel.updateTodoText(todoId, newTodoText, new Date().toLocaleString())
+        this.#todoAggregate.updateTodoText(todoId, newTodoText, new Date().toLocaleString())
     }
     updateCompletedState(todoId){
-        this.#todoModel.updateCompletedState(todoId, new Date().toLocaleString())
+        this.#todoAggregate.updateTodoCompleteState(todoId, new Date().toLocaleString())
     }
     deleteTodo(todoId){
-        this.#todoModel.deleteTodo(todoId)
+        this.#todoAggregate.deleteTodo(todoId)
     }
 }
